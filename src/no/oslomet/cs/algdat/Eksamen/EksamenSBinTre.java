@@ -131,5 +131,13 @@ public class EksamenSBinTre<T> {
         throw new UnsupportedOperationException("Ikke kodet ennå!");
     }
 
+    public static void main(String[] args) {
+        //oppgave 0
+        EksamenSBinTre<String> tre = new EksamenSBinTre<>(Comparator.naturalOrder());
+        System.out.println(tre.antall()); // Utskrift: 0
+
+
+    }
+
 
 } // ObligSBinTre
