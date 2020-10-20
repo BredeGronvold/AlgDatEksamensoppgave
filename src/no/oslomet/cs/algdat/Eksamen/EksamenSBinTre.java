@@ -114,24 +114,19 @@ public class EksamenSBinTre<T> {
     }
 
     public int antall(T verdi) {
+        int teller = 0;
         if(antall()>0 && inneholder(verdi)){
             Node <T> node = rot;
-            int teller = 0;
             while(node!=null) {
                 if(comp.compare(verdi,node.verdi)==0){
                     teller++;
-                    node=node.høyre;
-                }
-                else if(comp.compare(verdi,node.verdi)>0){
-                    node=node.høyre;
-                }else{
-                    node=node.venstre;
-                }
+                    node=node.høyre;}
+                else if(comp.compare(verdi,node.verdi)>0)node=node.høyre;
+                else node=node.venstre;
             }
-
             return teller;
         }else{
-            return 0;
+            return teller;
         }
 
 
@@ -195,6 +190,10 @@ public class EksamenSBinTre<T> {
         System.out.println(tre.antall(10)); // Utskrift: 1
 
          */
+
+        //oppgave 3
+
+
 
 
     }
