@@ -1,6 +1,7 @@
 package no.oslomet.cs.algdat.Eksamen;
 
 
+import java.io.LineNumberReader;
 import java.util.*;
 
 public class EksamenSBinTre<T> {
@@ -118,30 +119,43 @@ public class EksamenSBinTre<T> {
         if(antall()>0 && inneholder(verdi)){
             Node <T> node = rot;
             while(node!=null) {
-                if(comp.compare(verdi,node.verdi)==0){
+                if(comp.compare(verdi,node.verdi)<0) node=node.venstre;
+                else if(comp.compare(verdi,node.verdi)>0) node=node.høyre;
+                else{
+                    node=node.høyre;
                     teller++;
-                    node=node.høyre;}
-                else if(comp.compare(verdi,node.verdi)>0)node=node.høyre;
-                else node=node.venstre;
+                }
             }
-            return teller;
-        }else{
-            return teller;
         }
-
-
+        return teller;
     }
 
     public void nullstill() {
         throw new UnsupportedOperationException("Ikke kodet ennå!");
     }
 
-    private static <T> Node<T> førstePostorden(Node<T> p) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+    private static <T> Node<T> førstePostorden(Node<T> p) { //kompendiet programkode 5.1.7 h)
+        while (true) {//så lenge p er ulik null kjøres programmet
+            if (p.venstre != null) p = p.venstre; //sjekker om venstrebarn er ulik null, trigges --> p = p.venstre
+            else if (p.høyre != null) p = p.høyre;//sjekker om høyrebarn er ulik null, trigges --> p = p.høyre
+            else return p; //returnerer p når de over ikke trigges lenger
+        }
     }
 
     private static <T> Node<T> nestePostorden(Node<T> p) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        //fra kompendiet programkode 5.1.7
+        if (p.forelder == null) return null;//returnerer null hvis p er forelder (siste verdi i postorden)
+        else if (p == p.forelder.høyre) p = p.forelder;//sjekker om p er et høyre barn, hvis det er forelder neste i postorden
+        else if (p == p.forelder.venstre) {                 //sjekker om p er venstrebarn
+            if (p.forelder.høyre == null) p = p.forelder;//ser om høyrebarn til forelder ikke eksisterer, hvis dette
+                                                         //blir neste postorden p sin forelder
+            else {
+                p = p.forelder.høyre;
+                while (p.venstre != null) p = p.venstre;//hvis ingen over trigger, går jeg så lagt ned mot venstre fra p
+                //sin forelder sitt høyrebarn.
+            }
+        }
+        return p;//returnerer p ettersom jeg har endret på den i if-sjekkene
     }
 
     public void postorden(Oppgave<? super T> oppgave) {
