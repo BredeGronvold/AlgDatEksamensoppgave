@@ -135,6 +135,9 @@ public class EksamenSBinTre<T> {
     }
 
     private static <T> Node<T> førstePostorden(Node<T> p) { //kompendiet programkode 5.1.7 h)
+        while(p.forelder!=null){
+            p=p.forelder;
+        }
         while (true) {//så lenge p er ulik null kjøres programmet
             if (p.venstre != null) p = p.venstre; //sjekker om venstrebarn er ulik null, trigges --> p = p.venstre
             else if (p.høyre != null) p = p.høyre;//sjekker om høyrebarn er ulik null, trigges --> p = p.høyre
