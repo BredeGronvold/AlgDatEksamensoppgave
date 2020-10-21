@@ -149,15 +149,19 @@ public class EksamenSBinTre<T> {
         //fra kompendiet programkode 5.1.7
         if (p.forelder == null) return null;//returnerer null hvis p er forelder (siste verdi i postorden)
         else if (p == p.forelder.høyre) p = p.forelder;//sjekker om p er et høyre barn, hvis det er forelder neste i postorden
-        else if (p == p.forelder.venstre) {                 //sjekker om p er venstrebarn
+        else if (p == p.forelder.venstre) {            //sjekker om p er venstrebarn
             if (p.forelder.høyre == null) p = p.forelder;//ser om høyrebarn til forelder ikke eksisterer, hvis dette
                                                          //blir neste postorden p sin forelder
             else {
                 p = p.forelder.høyre;
-                while (p.venstre != null) p = p.venstre;//hvis ingen over trigger, går jeg så lagt ned mot venstre fra p
+                while (p.venstre != null || p.høyre!=null){
+                    if(p.venstre!=null)p = p.venstre;//hvis ingen over trigger, går jeg så lagt ned mot venstre fra p
+                    else p=p.høyre; //else p=p.høyre;
+                    }
+
+                }
                 //sin forelder sitt høyrebarn.
             }
-        }
         return p;//returnerer p ettersom jeg har endret på den i if-sjekkene
     }
 
