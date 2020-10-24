@@ -194,8 +194,22 @@ public class EksamenSBinTre<T> {
         }
     }
 
-    public ArrayList<T> serialize() {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+    public ArrayList<T> serialize() {//Programkode 5.1.6 a) (gjort litt om for å fungere for dette eksempelet)
+        if (tom()) return null;                  // tomt tre
+
+        ArrayList<Node> kø = new ArrayList<>();   // Se Avsnitt 4.2.2
+        kø.add(rot);                     // legger inn roten
+        ArrayList<T> queue = new ArrayList<>(); //oppretter en liste som skal returneres
+
+        while (kø.size()>0)                    // så lenge som køen ikke er tom
+        {
+            Node <T> p = kø.remove(0);            // tar ut fra køen
+            queue.add(p.verdi);                      //legger inn p (fjernet element fra køen) i queue
+
+            if (p.venstre != null) kø.add(p.venstre);
+            if (p.høyre != null) kø.add(p.høyre);
+        }
+        return queue;    //returenerer riktig liste
     }
 
     static <K> EksamenSBinTre<K> deserialize(ArrayList<K> data, Comparator<? super K> c) {
