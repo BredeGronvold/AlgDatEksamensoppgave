@@ -267,10 +267,26 @@ public class EksamenSBinTre<T> {
         return queue;    //returenerer riktig liste
     }
 
+
     static <K> EksamenSBinTre<K> deserialize(ArrayList<K> data, Comparator<? super K> c) {
         EksamenSBinTre tre = new EksamenSBinTre(Comparator.naturalOrder());
-
-        for(int i = 0; i<data.size(); i++){
+        /*int StartVerdi = (int) data.get(0);
+        tre.rot.verdi=StartVerdi;
+        tre.rot.venstre=tre.rot.høyre=null;
+        for(int i = 1; i<data.size(); i++){
+            int nyNode = (int) data.get(i);
+            while(tre.rot.høyre != null||  tre.rot.venstre != null){
+                int cmp = c.compare(data.get(i),(K)tre.rot.verdi);
+                if(cmp<0)tre.rot = tre.rot.venstre;
+                else tre.rot = tre.rot.høyre;
+            }
+            int cmp = c.compare(data.get(i),(K)tre.rot.verdi);
+            if(cmp<0)tre.rot.venstre=new Node(nyNode, tre.rot);
+            else tre.rot.høyre=new Node(nyNode, tre.rot);
+        }
+         */
+        tre.leggInn(data.get(0));
+        for(int i = 1; i<data.size();i++){
             tre.leggInn(data.get(i));
         }
         return tre;
