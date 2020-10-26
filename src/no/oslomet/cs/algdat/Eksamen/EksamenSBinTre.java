@@ -106,59 +106,23 @@ public class EksamenSBinTre<T> {
         return true;                             // vellykket innlegging
     }
 
-    public boolean fjern(T verdi) { // Programkode 5.2 8 d)
-        /*if (verdi == null) return false;  // treet har ingen nullverdier
-
-        Node<T> p = rot, q = null;   // q skal være forelder til p
-
-        while (p != null)            // leter etter verdi
-        {
-            int cmp = comp.compare(verdi,p.verdi);      // sammenligner
-            if (cmp < 0) { q = p; p = p.venstre; }      // går til venstre
-            else if (cmp > 0) { q = p; p = p.høyre; }   // går til høyre
-            else break;    // den søkte verdien ligger i p
-        }
-        if (p == null) return false;   // finner ikke verdi
-
-        if (p.venstre == null || p.høyre == null)  // Tilfelle 1) og 2)
-        {
-            Node<T> b = p.venstre != null ? p.venstre : p.høyre;  // b for barn
-            if (p == rot) rot = b;
-            else if (p == q.venstre) q.venstre = b;
-            else q.høyre = b;
-        }
-        else  // Tilfelle 3)
-        {
-            Node<T> s = p, r = p.høyre;   // finner neste i inorden
-            while (r.venstre != null)
-            {
-                s = r;    // s er forelder til r
-                r = r.venstre;
-            }
-
-            p.verdi = r.verdi;   // kopierer verdien i r til p
-
-            if (s != p) s.venstre = r.høyre;
-            else s.høyre = r.høyre;
-        }
-
-        antall--;   // det er nå én node mindre i treet
-        return true;
-         */
-        if(verdi== null) return false;
+    public boolean fjern(T verdi) {
+        if(verdi==null || !inneholder(verdi) || antall==0)return false;
 
         ArrayList<T> liste = serialize();
-        for(int i = 0; i<liste.size();i++){
-            if(verdi==liste.get(i)){
+        for (int i = 0; i < liste.size(); i++) {
+            if (verdi == liste.get(i)) {
                 liste.remove(i);
                 antall--;
                 return true;
             }
         }
+        return false;
     }
 
     public int fjernAlle(T verdi) {
         int teller=0;
+        if(verdi==null || antall==0) return teller;
         ArrayList<T> kø = serialize();
         for(int i = 0; i<kø.size();i++){
             if(verdi== kø.get(i)){
@@ -191,12 +155,12 @@ public class EksamenSBinTre<T> {
     public void nullstill() {//fjerner første postorden hver gang, den har ingen barn, slik at den er enklest å fjerne
         if(antall==0) return;
         else{
-            Node<T> node = førstePostorden(rot);
-            if(node.forelder.venstre==node)node.forelder.venstre=null;
-            else if(node.forelder.høyre==node) node.forelder.høyre=null;
-            node.verdi=null;
-            antall--;
-            nullstill();
+            ArrayList<T> kø = serialize();
+            while(kø.size()>0){
+                kø.remove(kø.size()-1);
+                antall--;
+                endringer++;
+            }
         }
     }
 
