@@ -1,7 +1,7 @@
 package no.oslomet.cs.algdat.Eksamen;
 
 
-import java.io.LineNumberReader;
+
 import java.util.*;
 
 public class EksamenSBinTre<T> {
@@ -107,7 +107,7 @@ public class EksamenSBinTre<T> {
     }
 
     public boolean fjern(T verdi) { // Programkode 5.2 8 d)
-        if (verdi == null) return false;  // treet har ingen nullverdier
+        /*if (verdi == null) return false;  // treet har ingen nullverdier
 
         Node<T> p = rot, q = null;   // q skal være forelder til p
 
@@ -144,6 +144,17 @@ public class EksamenSBinTre<T> {
 
         antall--;   // det er nå én node mindre i treet
         return true;
+         */
+        if(verdi== null) return false;
+
+        ArrayList<T> liste = serialize();
+        for(int i = 0; i<liste.size();i++){
+            if(verdi==liste.get(i)){
+                liste.remove(i);
+                antall--;
+                return true;
+            }
+        }
     }
 
     public int fjernAlle(T verdi) {
@@ -327,7 +338,7 @@ public class EksamenSBinTre<T> {
         System.out.println(tre.fjernAlle(4)); // 3
         tre.fjernAlle(7); tre.fjern(8);
         System.out.println(tre.antall()); // 5
-        System.out.println(tre + " " + tre.toString());
+        System.out.println(tre.toString());
         // [1, 2, 6, 9, 10] [10, 9, 6, 2, 1]
         // OBS: Hvis du ikke har gjort oppgave 4 kan du her bruke toString()
 
