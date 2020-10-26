@@ -2,8 +2,6 @@ package no.oslomet.cs.algdat.Eksamen;
 
 
 
-import jdk.swing.interop.SwingInterOpUtils;
-
 import java.util.*;
 
 public class EksamenSBinTre<T> {
@@ -98,13 +96,13 @@ public class EksamenSBinTre<T> {
 
         // p er nå null, dvs. ute av treet, q er den siste vi passerte
 
-        p = new Node(verdi, q);                   // oppretter en ny node
+        p = new Node<>(verdi, q);                   // oppretter en ny node
 
         if (q == null) rot = p;                  // p blir rotnode
         else if (cmp < 0) q.venstre = p;         // venstre barn til q
         else q.høyre = p;                        // høyre barn til q
 
-        antall++;                                // én verdi mer i treet
+        antall++;                                 // én verdi mer i treet;//én endring gjort i treet
         return true;                             // vellykket innlegging
     }
 
@@ -151,7 +149,7 @@ public class EksamenSBinTre<T> {
             if (s != p) s.venstre = r.høyre;
             else s.høyre = r.høyre;
         }
-        antall--;   // det er nå én node mindre i treet
+        antall--;   // det er nå én node mindre i tree;//gjort en endring
         return true;
     }
 
@@ -186,7 +184,7 @@ public class EksamenSBinTre<T> {
     public void nullstill() {//fjerner første postorden hver gang, den har ingen barn, slik at den er enklest å fjerne
         if(antall()>0){
             Node <T> p = førstePostorden(rot), q = p.forelder;
-            while(antall>1){
+            while(antall>1 && p!=null){
                 if(p==q.venstre){
                     q.venstre=null;
                 }
@@ -195,6 +193,7 @@ public class EksamenSBinTre<T> {
                 }
                 p=nestePostorden(p);
                 antall--;
+                antall();
             }
             rot=null;
             antall--;
@@ -234,11 +233,11 @@ public class EksamenSBinTre<T> {
 
     public void postorden(Oppgave<? super T> oppgave) {
         if (antall > 0) {
-            Node<T> p = rot;
-            p = førstePostorden(p);
+            Node<T> p = førstePostorden(rot);
             oppgave.utførOppgave(p.verdi);
             while (p.forelder!=null) {
                 p = nestePostorden(p);
+                assert p != null;
                 oppgave.utførOppgave(p.verdi);
             }
         }
@@ -252,10 +251,9 @@ public class EksamenSBinTre<T> {
     }
 
     private void postordenRecursive(Node<T> p, Oppgave<? super T> oppgave) {
-        if (p.forelder == null) {
-            return;
-        } else {
+        if(p.forelder!=null) {
             p = nestePostorden(p);
+            assert p != null;
             oppgave.utførOppgave(p.verdi);
             postordenRecursive(p, oppgave);
         }
@@ -264,87 +262,32 @@ public class EksamenSBinTre<T> {
     public ArrayList<T> serialize() {//Programkode 5.1.6 a) (gjort litt om for å fungere for dette eksempelet)
         if (tom()) return null;                  // tomt tre
 
-        ArrayList<Node> kø = new ArrayList<>();   // Se Avsnitt 4.2.2
-        kø.add(rot);                     // legger inn roten
-        ArrayList<T> queue = new ArrayList<>(); //oppretter en liste som skal returneres
+        Queue<Node<T>> queue = new ArrayDeque<>();
+        ArrayList<T> liste = new ArrayList<>();
 
-        while (kø.size()>0)                    // så lenge som køen ikke er tom
+        queue.add(rot);                     // legger inn roten
+        while (queue.size()>0)                    // så lenge som køen ikke er tom
         {
-            Node <T> p = kø.remove(0);            // tar ut fra køen
-            queue.add(p.verdi);                      //legger inn p (fjernet element fra køen) i queue
+            Node <T> p = queue.poll();            // tar ut fra køen
+            liste.add(p.verdi);                      //legger inn p (fjernet element fra køen) i queue
 
-            if (p.venstre != null) kø.add(p.venstre);
-            if (p.høyre != null) kø.add(p.høyre);
+            if (p.venstre != null) queue.add(p.venstre);
+            if (p.høyre != null) queue.add(p.høyre);
         }
-        return queue;    //returenerer riktig liste
+        return liste;
     }
 
 
     static <K> EksamenSBinTre<K> deserialize(ArrayList<K> data, Comparator<? super K> c) {
-        EksamenSBinTre tre = new EksamenSBinTre(Comparator.naturalOrder());
-        /*int StartVerdi = (int) data.get(0);
-        tre.rot.verdi=StartVerdi;
-        tre.rot.venstre=tre.rot.høyre=null;
-        for(int i = 1; i<data.size(); i++){
-            int nyNode = (int) data.get(i);
-            while(tre.rot.høyre != null||  tre.rot.venstre != null){
-                int cmp = c.compare(data.get(i),(K)tre.rot.verdi);
-                if(cmp<0)tre.rot = tre.rot.venstre;
-                else tre.rot = tre.rot.høyre;
-            }
-            int cmp = c.compare(data.get(i),(K)tre.rot.verdi);
-            if(cmp<0)tre.rot.venstre=new Node(nyNode, tre.rot);
-            else tre.rot.høyre=new Node(nyNode, tre.rot);
-        }
-         */
-        tre.leggInn(data.get(0));
-        for(int i = 1; i<data.size();i++){
-            tre.leggInn(data.get(i));
+        EksamenSBinTre <K> tre = new EksamenSBinTre<>(c);
+        for (K verdi : data) {
+            tre.leggInn(verdi);
         }
         return tre;
     }
 
 
     public static void main(String[] args) {
-        /*//oppgave 0
-        EksamenSBinTre<String> tre = new EksamenSBinTre<>(Comparator.naturalOrder());
-        System.out.println(tre.antall()); // Utskrift: 0;
-
-
-        //oppgave 1
-        Integer[] a = {4,7,2,9,5,10,8,1,3,6};
-        EksamenSBinTre<Integer> tre = new EksamenSBinTre<>(Comparator.naturalOrder());
-        for (int verdi : a) tre.leggInn(verdi);
-        System.out.println(tre.antall()); // Utskrift: 10
-
-
-
-        //oppgave 2
-        Integer[] a = {4,7,2,9,4,10,8,7,4,6};
-        EksamenSBinTre<Integer> tre = new EksamenSBinTre<>(Comparator.naturalOrder());
-        for (int verdi : a) tre.leggInn(verdi);
-        System.out.println(tre.antall()); // Utskrift: 10
-        System.out.println(tre.antall(5)); // Utskrift: 0
-        System.out.println(tre.antall(4)); // Utskrift: 3
-        System.out.println(tre.antall(7)); // Utskrift: 2
-        System.out.println(tre.antall(10)); // Utskrift: 1
-
-         */
-
-        //oppgave 6
-
-        int[] a = {4,7,2,9,4,10,8,7,4,6,1};
-        EksamenSBinTre<Integer> tre = new EksamenSBinTre<>(Comparator.naturalOrder());
-        for (int verdi : a) tre.leggInn(verdi);
-        System.out.println(tre.fjernAlle(4)); // 3
-        tre.fjernAlle(7); tre.fjern(8);
-        System.out.println(tre.antall()); // 5
-        System.out.println(tre.toString());
-        // [1, 2, 6, 9, 10] [10, 9, 6, 2, 1]
-        // OBS: Hvis du ikke har gjort oppgave 4 kan du her bruke toString()
-
-
-
     }
 
 
