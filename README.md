@@ -29,4 +29,11 @@ Vi har brukt git til å dokumentere arbeidet vårt. Jeg har 16 commits totalt, o
              -Når verdien jeg ser etter og noden jeg ligger på er like, økes teller med en (teller++)
              -Når teller går utenfor treet (node.høyre/ node.venstre er null) går jeg ut av while-løkken og returnerer telleren
              
-          3:
+* Oppgave 3: -Begge metodene tar inn en node. Derfor starter jeg med å komme meg helt til toppen av teet i første while-løkke
+              i metoden førtstePostordem.
+             -Når jeg er i toppen av treet bruker jeg igjen en while-løkke for å komme meg nederst mot venstre i treet, og på det "yngste" barnet,
+              hvor første postorden ligger. Kjører denne while-løkken helt til det ikke finnes flere barn.
+             -nestePostorden starter jeg med noen if-tester, for å finne ut om jeg kan enkelt returnere null om jeg er i toppen av treet,
+              forelder hvis jeg er på et høyrebarn og det som må skje for et venstrebarn:
+              der returneres forelder hvis p er enebarn.
+              ellers må jeg gå i en while-løkke som har samme prinsipp som førstePostorden for å finne den neste i postorden.
