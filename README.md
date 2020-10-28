@@ -49,7 +49,7 @@ Vi har brukt git til å dokumentere arbeidet vårt. Jeg har 16 commits totalt, o
               kaller på nestePostorden med node p som parameter, oppgave utført.
               og kaller på metoden jeg er inne i for å kjøre samme rekursivt fram til p.forelder==null;
 
-* Oppgave 4:  Hentet kode fra Programkode 5.1.6 a)
+* Oppgave 5:  Hentet kode fra Programkode 5.1.6 a)
              -serialize() returnerer null for tomt tre.
               oppretter en queue og en ArrayList
               legger til roten i queue, tar ut en node fra queue og legger inn i p, hvs p har barn legges disse inn i queue.
@@ -57,3 +57,20 @@ Vi har brukt git til å dokumentere arbeidet vårt. Jeg har 16 commits totalt, o
              -deserialize:
               oppretter et nytt tre i toppen.
               legger inn i treet i en for-løkke hvor jeg kaller på metoden leggInn fra oppgave 1
+              
+              
+* Oppgave 6: Fjern metoden er hentet fra Programkode 5.2 8 d)
+            -public boolean fjern(T verdi):
+             Koden har et par endringer fra kompendiet, når jeg ser på for tilgelle 1) og 2), ikk begge barnene finnes,
+             der retter jeg på pekere for barnet til noden som skal gjernes, setter det til forelderen.
+             jeg returnerer ture hvis koden har kjørt og fjerner en fra antallet.
+            -public int fjernAlle(T verdi):
+             opretter en teller i toppen som retureneres i slutten av metoden
+             dersom veriden er null eller antall er 0 returerer jeg teller når den fremdels er 0
+             hvis verien som skal fjernes fremdeles er i treet fjernes den en etter en med metoden fjern(verdi) og teller legges til en hver gang
+             returer teller i bunn hvor jeg har telt antall ganger jeg har fjernet et element.
+            -public void nullstill():
+             hvis antall>0 opprettes en node og jeg går inn i en while-løkke som fjerner noder i postorden.
+             passer på om det er et høyre eller venstrebarn som skal fjerens mtp pekerne, slik at de blir riktig.
+             helt nederst settes rot=null siden det er den siste noden i postorden.
+             Jeg har lagt på at antall() metoden kjøres i hver while-itterasjon fordi metoden gikk for raskt når jeg ikke hadde den med. 

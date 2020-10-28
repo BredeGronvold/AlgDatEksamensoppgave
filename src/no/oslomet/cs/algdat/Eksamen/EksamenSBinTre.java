@@ -106,19 +106,19 @@ public class EksamenSBinTre<T> {
         return true;                             // vellykket innlegging
     }
 
-    public boolean fjern(T verdi) { // Programkode 5.2 8 d)
-        if (verdi == null) return false;  // treet har ingen nullverdier, og verdien må være i treet
-        Node<T> p = rot, q = null;   // q skal være forelder til p
+    public boolean fjern(T verdi) {
+        if (verdi == null || !inneholder(verdi) || antall()==0) return false;
+        Node<T> p = rot, q = null;
 
-        while (p != null) {          // leter etter verdi
-            int cmp = comp.compare(verdi,p.verdi);      // sammenligner
-            if (cmp < 0) { q = p; p = p.venstre; }      // går til venstre
-            else if (cmp > 0) { q = p; p = p.høyre; }   // går til høyre
-            else break;    // den søkte verdien ligger i p
+        while (p != null) {
+            int cmp = comp.compare(verdi,p.verdi);
+            if (cmp < 0) { q = p; p = p.venstre; }
+            else if (cmp > 0) { q = p; p = p.høyre; }
+            else break;
         }
-        if (p == null) return false;   // finner ikke verdi
-        if (p.venstre == null || p.høyre == null){  // Tilfelle 1) og 2)
-            Node<T> b = p.venstre != null ? p.venstre : p.høyre;  // b for barn
+        if (p == null) return false;
+        if (p.venstre == null || p.høyre == null){
+            Node<T> b = p.venstre != null ? p.venstre : p.høyre;
             if (p == rot){
                 rot = b;
                 if(rot!=null) {
@@ -138,24 +138,24 @@ public class EksamenSBinTre<T> {
                 }
             }
         }
-        else{  // Tilfelle 3)
-            Node<T> s = p, r = p.høyre;   // finner neste i inorden
+        else{
+            Node<T> s = p, r = p.høyre;
             while (r.venstre != null) {
-                s = r;    // s er forelder til r
+                s = r;
                 r = r.venstre;
             }
-            p.verdi = r.verdi;   // kopierer verdien i r til p
+            p.verdi = r.verdi;
 
             if (s != p) s.venstre = r.høyre;
             else s.høyre = r.høyre;
         }
-        antall--;   // det er nå én node mindre i tree;//gjort en endring
+        antall--;
         return true;
     }
 
     public int fjernAlle(T verdi) {
         int teller=0;
-        if(verdi==null || antall==0 || !inneholder(verdi)) return teller;
+        if(verdi==null || antall==0) return teller;
         else{
             while(inneholder(verdi)){
                 fjern(verdi);
@@ -182,7 +182,7 @@ public class EksamenSBinTre<T> {
     }
 
     public void nullstill() {//fjerner første postorden hver gang, den har ingen barn, slik at den er enklest å fjerne
-        if(antall()>0){
+        if(antall>0){
             Node <T> p = førstePostorden(rot), q = p.forelder;
             while(antall>1 && p!=null){
                 if(p==q.venstre){
