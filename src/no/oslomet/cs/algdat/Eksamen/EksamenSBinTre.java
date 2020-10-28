@@ -108,15 +108,21 @@ public class EksamenSBinTre<T> {
 
     public boolean fjern(T verdi) {
         if (verdi == null || !inneholder(verdi) || antall()==0) return false;
+
         Node<T> p = rot, q = null;
 
         while (p != null) {
             int cmp = comp.compare(verdi,p.verdi);
-            if (cmp < 0) { q = p; p = p.venstre; }
-            else if (cmp > 0) { q = p; p = p.høyre; }
-            else break;
+            if (cmp < 0) {
+                q = p;
+                p = p.venstre;
+            } else if (cmp > 0) {
+                q = p;
+                p = p.høyre;
+            } else break;
         }
         if (p == null) return false;
+
         if (p.venstre == null || p.høyre == null){
             Node<T> b = p.venstre != null ? p.venstre : p.høyre;
             if (p == rot){
@@ -124,21 +130,18 @@ public class EksamenSBinTre<T> {
                 if(rot!=null) {
                     rot.forelder = null;
                 }
-            }
-            else if (p == q.venstre){
+            } else if (p == q.venstre){
                 q.venstre = b;
                 if(b!=null) {
                     b.forelder = q;
                 }
-            }
-            else{
+            } else{
                 q.høyre = b;
                 if(b!=null) {
                     b.forelder = q;
                 }
             }
-        }
-        else{
+        } else{
             Node<T> s = p, r = p.høyre;
             while (r.venstre != null) {
                 s = r;
@@ -187,8 +190,7 @@ public class EksamenSBinTre<T> {
             while(antall>1 && p!=null){
                 if(p==q.venstre){
                     q.venstre=null;
-                }
-                else{
+                } else{
                     q.høyre=null;
                 }
                 p=nestePostorden(p);
