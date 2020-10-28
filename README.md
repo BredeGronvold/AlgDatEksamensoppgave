@@ -48,3 +48,12 @@ Vi har brukt git til å dokumentere arbeidet vårt. Jeg har 16 commits totalt, o
               samme kode i en if-test som i while-løkken til postorden, p.forelder != null.
               kaller på nestePostorden med node p som parameter, oppgave utført.
               og kaller på metoden jeg er inne i for å kjøre samme rekursivt fram til p.forelder==null;
+
+* Oppgave 4:  Hentet kode fra Programkode 5.1.6 a)
+             -serialize() returnerer null for tomt tre.
+              oppretter en queue og en ArrayList
+              legger til roten i queue, tar ut en node fra queue og legger inn i p, hvs p har barn legges disse inn i queue.
+              Legger inn i queue nivåvis.
+             -deserialize:
+              oppretter et nytt tre i toppen.
+              legger inn i treet i en for-løkke hvor jeg kaller på metoden leggInn fra oppgave 1
