@@ -29,7 +29,8 @@ Vi har brukt git til å dokumentere arbeidet vårt. Jeg har 16 commits totalt, o
              -Når verdien jeg ser etter og noden jeg ligger på er like, økes teller med en (teller++)
              -Når teller går utenfor treet (node.høyre/ node.venstre er null) går jeg ut av while-løkken og returnerer telleren
              
-* Oppgave 3: -Begge metodene tar inn en node. Derfor starter jeg med å komme meg helt til toppen av teet i første while-løkke
+* Oppgave 3: -Brukt noe kode fra kompendiet programkode 5.1.7
+             -Begge metodene tar inn en node. Derfor starter jeg med å komme meg helt til toppen av teet i første while-løkke
               i metoden førtstePostordem.
              -Når jeg er i toppen av treet bruker jeg igjen en while-løkke for å komme meg nederst mot venstre i treet, og på det "yngste" barnet,
               hvor første postorden ligger. Kjører denne while-løkken helt til det ikke finnes flere barn.
@@ -37,3 +38,13 @@ Vi har brukt git til å dokumentere arbeidet vårt. Jeg har 16 commits totalt, o
               forelder hvis jeg er på et høyrebarn og det som må skje for et venstrebarn:
               der returneres forelder hvis p er enebarn.
               ellers må jeg gå i en while-løkke som har samme prinsipp som førstePostorden for å finne den neste i postorden.
+              
+* Oppgave 4: -public void postorden(Oppgave<? super T> oppgave):         
+              Starter med p se om listen jeg har er tom eller ikke
+              får inn første postorden, setter oppgave til utført
+              videre over i en while-løkke hvor jeg kjører nestePostorden metoden helt fram til jeg er på rot-hvor p.forelder==null
+             -private void postordenRecursive(Node<T> p, Oppgave<? super T> oppgave):
+              starter med å sjekke at antallet er større enn 0 her også
+              samme kode i en if-test som i while-løkken til postorden, p.forelder != null.
+              kaller på nestePostorden med node p som parameter, oppgave utført.
+              og kaller på metoden jeg er inne i for å kjøre samme rekursivt fram til p.forelder==null;

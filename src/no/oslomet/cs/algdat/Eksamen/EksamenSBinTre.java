@@ -200,35 +200,34 @@ public class EksamenSBinTre<T> {
         }
     }
 
-    private static <T> Node<T> førstePostorden(Node<T> p) { //kompendiet programkode 5.1.7 h)
+    private static <T> Node<T> førstePostorden(Node<T> p) {
         while(p.forelder!=null){
             p=p.forelder;
         }
-        while (true) {//så lenge p er ulik null kjøres programmet
-            if (p.venstre != null) p = p.venstre; //sjekker om venstrebarn er ulik null, trigges --> p = p.venstre
-            else if (p.høyre != null) p = p.høyre;//sjekker om høyrebarn er ulik null, trigges --> p = p.høyre
-            else return p; //returnerer p når de over ikke trigges lenger
+        while (true) {
+            if (p.venstre != null) p = p.venstre;
+            else if (p.høyre != null) p = p.høyre;
+            else return p;
         }
     }
 
     private static <T> Node<T> nestePostorden(Node<T> p) {
-        //fra kompendiet programkode 5.1.7
-        if (p.forelder == null) return null;             //returnerer null hvis p er forelder (siste verdi i postorden)
-        else if (p == p.forelder.høyre) p = p.forelder;  //sjekker om p er et høyre barn, hvis det er forelder neste i postorden
-        else if (p == p.forelder.venstre) {              //sjekker om p er venstrebarn
-            if (p.forelder.høyre == null) p = p.forelder;//ser om høyrebarn til forelder ikke eksisterer, hvis dette
-                                                         //blir neste postorden p sin forelder
+        if (p.forelder == null) return null;
+        else if (p == p.forelder.høyre) p = p.forelder;
+        else if (p == p.forelder.venstre) {
+            if (p.forelder.høyre == null) p = p.forelder;
+
             else {
-                p = p.forelder.høyre;                    //sin forelder sitt høyrebarn.
+                p = p.forelder.høyre;
                 while (p.venstre != null || p.høyre!=null){
-                    if(p.venstre!=null) p = p.venstre;   //hvis ingen over trigger, går jeg så lagt ned mot venstre fra p
-                    else p=p.høyre;                      //else p=p.høyre;
+                    if(p.venstre!=null) p = p.venstre;
+                    else p=p.høyre;
                     }
 
                 }
 
             }
-        return p;//returnerer p ettersom jeg har endret på den i if-sjekkene
+        return p;
     }
 
     public void postorden(Oppgave<? super T> oppgave) {
@@ -251,11 +250,13 @@ public class EksamenSBinTre<T> {
     }
 
     private void postordenRecursive(Node<T> p, Oppgave<? super T> oppgave) {
-        if(p.forelder!=null) {
-            p = nestePostorden(p);
-            assert p != null;
-            oppgave.utførOppgave(p.verdi);
-            postordenRecursive(p, oppgave);
+        if (antall > 0) {
+            if (p.forelder != null) {
+                p = nestePostorden(p);
+                assert p != null;
+                oppgave.utførOppgave(p.verdi);
+                postordenRecursive(p, oppgave);
+            }
         }
     }
 
