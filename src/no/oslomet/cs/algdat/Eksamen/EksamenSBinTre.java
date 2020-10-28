@@ -290,8 +290,5 @@ public class EksamenSBinTre<T> {
     }
 
 
-    public static void main(String[] args) {
-    }
-
 
 } // ObligSBinTre
