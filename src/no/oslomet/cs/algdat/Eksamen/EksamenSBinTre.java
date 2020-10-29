@@ -184,7 +184,7 @@ public class EksamenSBinTre<T> {
     public void nullstill() {//fjerner første postorden hver gang, den har ingen barn, slik at den er enklest å fjerne
         if(antall>0){   //sjekker at treet ikke er tomt
             Node <T> p = førstePostorden(rot), q = p.forelder;  //oppretter en node og foreldre til noden
-            while(antall>1 && p!=null){
+            while(antall>1){
                 if(p==q.venstre){ //sjekk om jeg skal fjerne venstre eller høyrebarn
                     q.venstre=null;
                     p.verdi=null;

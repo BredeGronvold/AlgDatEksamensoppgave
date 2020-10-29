@@ -74,3 +74,10 @@ Vi har brukt git til å dokumentere arbeidet vårt. Jeg har 16 commits totalt, o
              passer på om det er et høyre eller venstrebarn som skal fjerens mtp pekerne, slik at de blir riktig.
              helt nederst settes rot=null siden det er den siste noden i postorden.
              Jeg har lagt på at antall() metoden kjøres i hver while-itterasjon fordi metoden gikk for raskt når jeg ikke hadde den med. 
+             
+             
+* Warnings: 1) Non ASCII characters in an identifier, ikke fjernet fordi det er en "ø" i høyre som blir referert til
+            2) endringer brukes aldri, lærer sa at vi ikke behøvde å bry oss om den
+            3) Jeg bruker aldri returverdien til leggInn (true/ false), bruker den kun til å legge inn i treet.
+               Kunne gjort den om til en void, men jeg endrer ikke på det, ettersom oppgaveteksten sier at det er en boolsk metode.
+            4) Metoden førstePostorden(Node<T> p), samme som 1), reagerer på "ø" i metodenavnet
