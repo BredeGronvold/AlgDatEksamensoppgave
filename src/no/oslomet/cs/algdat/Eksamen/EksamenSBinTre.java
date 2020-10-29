@@ -81,7 +81,7 @@ public class EksamenSBinTre<T> {
         return antall == 0;
     }
 
-    public boolean leggInn(T verdi) {
+    public boolean leggInn(T verdi) { // skal ligge i class SBinTre, programkode i kompendiet 5.2.3 a)
         Objects.requireNonNull(verdi, "Ulovlig med nullverdier!");
 
         Node<T> p = rot, q = null;               // p starter i roten
@@ -106,137 +106,132 @@ public class EksamenSBinTre<T> {
         return true;                             // vellykket innlegging
     }
 
-    public boolean fjern(T verdi) {
-        if (verdi == null || !inneholder(verdi) || antall()==0) return false;
+    public boolean fjern(T verdi) {// hører til klassen SBinTre, programkode fra kompendiet 5.2.8 d)
+        if (verdi == null || !inneholder(verdi) || antall()==0) return false; // treet har ingen nullverdier
 
-        Node<T> p = rot, q = null;
+        Node<T> p = rot, q = null;// q skal være forelder til p
 
-        while (p != null) {
-            int cmp = comp.compare(verdi,p.verdi);
-            if (cmp < 0) {
-                q = p;
-                p = p.venstre;
-            } else if (cmp > 0) {
-                q = p;
-                p = p.høyre;
-            } else break;
+        while (p != null) {// leter etter verdi
+            int cmp = comp.compare(verdi,p.verdi);   // sammenligner
+            if (cmp < 0) {q = p; p = p.venstre;}  // går til venstre
+            else if (cmp > 0) {q = p; p = p.høyre;} // går til høyre
+            else break;  // den søkte verdien ligger i p
         }
-        if (p == null) return false;
+        if (p == null) return false;   // finner ikke verdi
 
-        if (p.venstre == null || p.høyre == null){
-            Node<T> b = p.venstre != null ? p.venstre : p.høyre;
-            if (p == rot){
+        if (p.venstre == null || p.høyre == null){   // Tilfelle 1) og 2)
+            Node<T> b = p.venstre != null ? p.venstre : p.høyre;  // b for barn
+            if (p == rot){ //hvis rot skal fjernes
                 rot = b;
-                if(rot!=null) {
+                if(rot!=null) { //hvis rot er eneste i treet
                     rot.forelder = null;
                 }
-            } else if (p == q.venstre){
+            } else if (p == q.venstre){  //hvis et venstrebarn skal fjernes
                 q.venstre = b;
-                if(b!=null) {
+                if(b!=null) {   //hvis det finnes et barn til fjernet element
                     b.forelder = q;
                 }
-            } else{
+            } else{   //hvis er høyrebarn skal fjernes
                 q.høyre = b;
-                if(b!=null) {
+                if(b!=null) {   //hvis det finnes et barn til fjernet element
                     b.forelder = q;
                 }
             }
-        } else{
-            Node<T> s = p, r = p.høyre;
+        } else{ // Tilfelle 3)
+            Node<T> s = p, r = p.høyre;  // finner neste i inorden
             while (r.venstre != null) {
-                s = r;
+                s = r;  // s er forelder til r
                 r = r.venstre;
             }
-            p.verdi = r.verdi;
+            p.verdi = r.verdi;  // kopierer verdien i r til p
 
             if (s != p) s.venstre = r.høyre;
             else s.høyre = r.høyre;
         }
-        antall--;
+        antall--;   // det er nå én node mindre i treet
         return true;
     }
 
     public int fjernAlle(T verdi) {
-        int teller=0;
-        if(verdi==null || antall==0) return teller;
+        int teller=0;  //teller som teller antall som er fjernet
+        if(verdi==null || antall==0) return teller; //slik at jeg ikke får fjernet elementer jeg ikke skal(0 blir returnert)
         else{
-            while(inneholder(verdi)){
-                fjern(verdi);
-                teller++;
+            while(inneholder(verdi)){  //holder på så lenge verdi fremdeles er i treet
+                fjern(verdi);  //kaller på fjernmetoden, antall oppdateres der
+                teller++;   //legger til i teller hver gang jeg har fjernet et element
             }
         }
-        return teller;
+        return teller;   //returnerer teller til slutt
     }
 
     public int antall(T verdi) {
-        int teller = 0;
-        if(antall()>0 && inneholder(verdi)){
+        int teller = 0;    //bruker teller her også til å telle antall elementer som er like
+        if(antall()>0 && inneholder(verdi)){    //sjekk for om verdi i det hele tatt er i treet, og om treet "eksisterer"
             Node <T> node = rot;
-            while(node!=null) {
-                if(comp.compare(verdi,node.verdi)<0) node=node.venstre;
-                else if(comp.compare(verdi,node.verdi)>0) node=node.høyre;
+            while(node!=null) { //holder på til jeg er ute av treet
+                int cmp = comp.compare(verdi,node.verdi);   //sammenligner verdier
+                if(cmp<0) node=node.venstre;
+                else if(cmp>0) node=node.høyre;
                 else{
                     node=node.høyre;
-                    teller++;
+                    teller++;   //for like verdier teller jeg en opp
                 }
             }
         }
-        return teller;
+        return teller;  //returnerer resultatet
     }
 
     public void nullstill() {//fjerner første postorden hver gang, den har ingen barn, slik at den er enklest å fjerne
-        if(antall>0){
-            Node <T> p = førstePostorden(rot), q = p.forelder;
+        if(antall>0){   //sjekker at treet ikke er tomt
+            Node <T> p = førstePostorden(rot), q = p.forelder;  //oppretter en node og foreldre til noden
             while(antall>1 && p!=null){
-                if(p==q.venstre){
+                if(p==q.venstre){ //sjekk om jeg skal fjerne venstre eller høyrebarn
                     q.venstre=null;
+                    p.verdi=null;
                 } else{
+                    p.verdi=null;
                     q.høyre=null;
                 }
-                p=nestePostorden(p);
-                antall--;
-                antall();
+                p=førstePostorden(rot); //finner neste i postorden, slik at jeg vet jeg ikke har noen barn å ta hensyn til
+                antall--;   //trekker fra i antall etter jeg har fjernet
             }
-            rot=null;
-            antall--;
+            rot=null;  //til slutt nullstilles noden
+            antall--;  //trekker fra i antall etter jeg har fjernet
         }
     }
 
     private static <T> Node<T> førstePostorden(Node<T> p) {
-        while(p.forelder!=null){
+        while(p.forelder!=null){ //kommer meg først opp til rot-noden
             p=p.forelder;
         }
-        while (true) {
-            if (p.venstre != null) p = p.venstre;
-            else if (p.høyre != null) p = p.høyre;
-            else return p;
+        while (true) { //holder på helt fram til p.venstre og p.høyre er lik null
+            if (p.venstre != null) p = p.venstre; //ønsker å gå mot venstre hvis mulig
+            else if (p.høyre != null) p = p.høyre; //går til høyre hvis venstre ikke går
+            else return p;   //returnerer node p hvis den ikke har noen barn
         }
     }
 
     private static <T> Node<T> nestePostorden(Node<T> p) {
-        if (p.forelder == null) return null;
-        else if (p == p.forelder.høyre) p = p.forelder;
-        else if (p == p.forelder.venstre) {
-            if (p.forelder.høyre == null) p = p.forelder;
-
+        if (p.forelder == null) return null;    //returnerer null dersom jeg er på rot-noden
+        else if (p == p.forelder.høyre) p = p.forelder;     //hvis p er et høyrebarn returneres foreldrenoden
+        else if (p == p.forelder.venstre) {     //litt annerledes for venstrebarn
+            if (p.forelder.høyre == null) p = p.forelder;   //enkelt for alenebarn
             else {
-                p = p.forelder.høyre;
+                p = p.forelder.høyre;   //samme while-løkke som i førstePostorden()
                 while (p.venstre != null || p.høyre!=null){
                     if(p.venstre!=null) p = p.venstre;
                     else p=p.høyre;
                     }
-
                 }
-
             }
-        return p;
+        return p;  //returnerer noden jeg kom fram til
     }
 
     public void postorden(Oppgave<? super T> oppgave) {
         if (antall > 0) {
             Node<T> p = førstePostorden(rot);
             oppgave.utførOppgave(p.verdi);
-            while (p.forelder!=null) {
+            while (p.forelder!=null) {  //kjører en while-løkke så lenge p.forelder ikke er null (ikke kommet til rotnoden)
                 p = nestePostorden(p);
                 assert p != null;
                 oppgave.utførOppgave(p.verdi);
@@ -257,7 +252,7 @@ public class EksamenSBinTre<T> {
                 p = nestePostorden(p);
                 assert p != null;
                 oppgave.utførOppgave(p.verdi);
-                postordenRecursive(p, oppgave);
+                postordenRecursive(p, oppgave);  //rekursiv metode, kaller seg selv, setter p til nestepostorden hver gang
             }
         }
     }
@@ -282,11 +277,11 @@ public class EksamenSBinTre<T> {
 
 
     static <K> EksamenSBinTre<K> deserialize(ArrayList<K> data, Comparator<? super K> c) {
-        EksamenSBinTre <K> tre = new EksamenSBinTre<>(c);
-        for (K verdi : data) {
+        EksamenSBinTre <K> tre = new EksamenSBinTre<>(c);  //oppretter et nytt tre
+        for (K verdi : data) {  //har en ArrayList med verdier som legges inn i treet
             tre.leggInn(verdi);
         }
-        return tre;
+        return tre; //nytt tre returneres
     }
 
 
